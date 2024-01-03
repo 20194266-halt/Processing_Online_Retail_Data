@@ -2,12 +2,12 @@ import scrapy
 import json
 from fake_useragent import UserAgent
 import sys
-
+import csv
 class LazSpider(scrapy.Spider):
     name = 'laz'
     allowed_domains = ['www.lazada.vn']
     ua = UserAgent()
-    page = 1
+    page = 16
     def start_requests(self):
         yield scrapy.Request(url=f'https://www.lazada.vn/dien-thoai-di-dong/?ajax=true&page={self.page}&spm=a2o42.searchlistcategory.cate_5.1.46281e22mYNSDT',
         callback=self.parse,
@@ -25,6 +25,9 @@ class LazSpider(scrapy.Spider):
     def parse(self, response):
         data = json.loads(response.body)
         try:
+            existing_data= [['NAME', 'productUrl', 'imageUrl', 'originalPrice', 
+                                'DiscountedPrice', 'Discount', 'ratingScore',
+                                'review','description','categories', 'itemId','page']]
             for item in data.get('mods').get('listItems'):
                 yield {
                 'NAME' : item.get('name'),
@@ -40,12 +43,22 @@ class LazSpider(scrapy.Spider):
                 'itemId' : item.get('itemId'),
                 'page' : self.page
                 }
+                existing_data.append([item.get('name'), item.get('productUrl'), item.get('image'), 
+                                    item.get('originalPrice'), item.get('price'),
+                                    item.get('discount'), item.get('ratingScore'), item.get('review'), 
+                                    item.get('description'),item.get('categories'), item.get('itemId'), self.page])
+            
+            file_path = "output15.csv"
+            # Write data to CSV file
+            with open(file_path, "w", newline="") as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerows(existing_data)
         except TypeError:
             print("NO PAGE LEFT TO SCRAPE")
             sys.exit(0)
         except AttributeError:
             print("Blocked on page number :",self.page)
-        
+        '''
         self.page = self.page + 1
         yield scrapy.Request(url=f'https://www.lazada.sg/mother-baby/?ajax=true&page={self.page}&spm=a2o42.searchlistcategory.cate_5.1.46281e22mYNSDT',
         callback=self.parse,
@@ -58,6 +71,7 @@ class LazSpider(scrapy.Spider):
             },
         dont_filter=True
         )
+        '''
 
         
 
