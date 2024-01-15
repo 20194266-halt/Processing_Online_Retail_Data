@@ -1,9 +1,12 @@
 
 from hdfs import InsecureClient
+from datetime import datetime
 def save_file_to_hdfs(tmp_hdfs_path):
   client = InsecureClient('http://localhost:9870')
-  client.upload('/data/output1.csv', tmp_hdfs_path)
-save_file_to_hdfs('/home/dell/Processing_Online_Retail_Data/Data/output1.csv')
+  timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+  hdfs_path = f'/data/lazada_{timestamp}.csv'
+  client.upload(hdfs_path, tmp_hdfs_path)
+save_file_to_hdfs('/home/dell/Processing_Online_Retail_Data/Transform/output.csv')
 # from pyspark.sql import SparkSession
 # from pyspark.sql.types import *
 

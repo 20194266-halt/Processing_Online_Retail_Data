@@ -41,7 +41,7 @@ class LazSpider(scrapy.Spider):
                             'categories', 'itemId','page']]
             for item in data.get('mods').get('listItems'):
                 yield {
-                    'NAME' : item.get('name'),
+                    'name' : item.get('name'),
                     'productUrl' : item.get('productUrl'),
                     'imageUrl' : item.get('image'),
                     'originalPrice' : item.get('originalPrice'),
@@ -49,7 +49,7 @@ class LazSpider(scrapy.Spider):
                     'Discount' : item.get('discount'),
                     'ratingScore' : item.get('ratingScore'),
                     'review' : item.get('review'),
-                    'description' : item.get('description'),
+                    'description' : item.get('description', 'Electrical Device'),
                     'categories' : item.get('categories'),
                     'itemId' : item.get('itemId'),
                     'itemSoldCntShow': item.get('itemSoldCntShow'),
@@ -59,7 +59,7 @@ class LazSpider(scrapy.Spider):
                     'brandName': item.get('brandName'),
                     'location': item.get('location')
                 }
-                existing_data.append([item.get('name'), item.get('productUrl'), item.get('image'), item.get('originalPrice'),
+                existing_data.append([item.get('name', '').replace(',', '').replace("'", '').replace('"', ''), item.get('productUrl'), item.get('image'), item.get('originalPrice'),
                                     item.get('price'), item.get('discount'), item.get('ratingScore'), item.get('review'),
                                     item.get('description'), item.get('categories'), item.get('itemId'), item.get('itemSoldCntShow'),
                                     item.get('sellerName'), item.get('sellerId'), item.get('brandId'), item.get('brandName'), 
