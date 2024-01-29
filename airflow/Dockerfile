@@ -1,4 +1,4 @@
-FROM apache/airflow:2.8.1
+FROM apache/airflow:2.8.1-python3.11
 
 USER root
 
@@ -11,12 +11,7 @@ RUN apt-get update \
 
 USER airflow
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-
 # Install Apache Airflow and Apache Spark provider
-RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" apache-airflow-providers-apache-spark
 
 # Upgrade pip
 RUN pip install --upgrade pip
-
-# Install psutil
-RUN pip install psutil==5.8.0
