@@ -31,41 +31,6 @@ run_spark_job = SparkSubmitOperator(
     verbose=1, 
     dag=dag,    
 )
-# load_raw_data = BashOperator(
-#     task_id='load_raw_data',
-#     bash_command='sudo docker exec setupenvironment_jupyterlab_1 /bin/sh -c "python3 load_raw_data.py"',
-#     dag=dag,
-# )
-# run_connect_spark_job >> load_raw_data
-
-# handle_missing = BashOperator(
-#     task_id='handle_missing',
-#     bash_command='sudo docker exec setupenvironment_jupyterlab_1 /bin/sh -c "python3 handle_missing.py"',
-#     dag=dag,
-# )
-# load_raw_data >> handle_missing
-# nomalize_datatype = BashOperator(
-#     task_id='nomalize_datatype',
-#     bash_command='sudo docker exec setupenvironment_jupyterlab_1 /bin/sh -c "python3 nomalize_data.py"',
-#     dag=dag,
-# )
-# handle_missing >> nomalize_datatype
-# remove_duplicate = BashOperator(
-#     task_id='remove_duplicate',
-#     bash_command='sudo docker exec setupenvironment_jupyterlab_1 /bin/sh -c "python3 remove_duplicate.py"',
-#     dag=dag,
-# )
-# nomalize_datatype >> remove_duplicate
-
-
-# load_data = BashOperator(
-#     task_id='load_data',
-#     bash_command='sudo docker exec setupenvironment_jupyterlab_1 /bin/sh -c "python3 load_data.py"',
-#     dag=dag,
-# )
-
-# remove_duplicate >> load_data
 run_extract_data >> run_spark_job
-
 if __name__ == "__main__":
     dag.cli()
